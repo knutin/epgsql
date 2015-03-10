@@ -96,7 +96,7 @@ connect(C, Host, Username, Password, Opts) ->
                          {connect, Host, Username, Password, Opts},
                          infinity) of
         connected ->
-            update_type_cache(C),
+            %%update_type_cache(C),
             {ok, C};
         Error = {error, _} ->
             Error
