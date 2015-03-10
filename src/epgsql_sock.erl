@@ -118,6 +118,11 @@ handle_cast({{Method, From, Ref}, Command} = Req, State)
     command(Command, State#state{queue = queue:in(Req, Q)});
 
 handle_cast(stop, State) ->
+    ok = send(State, <<"X", 4:32/integer>>),
+    case State#state.mod of
+        gen_tcp -> gen_tcp:close(State#state.sock);
+        ssl -> ssl:close(State#state.sock)
+    end,
     {stop, normal, flush_queue(State, {error, closed})};
 
 handle_cast(cancel, State = #state{backend = {Pid, Key},
