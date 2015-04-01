@@ -118,7 +118,7 @@ handle_cast({{Method, From, Ref}, Command} = Req, State)
     command(Command, State#state{queue = queue:in(Req, Q)});
 
 handle_cast(stop, State) ->
-    ok = send(State, <<"X", 4:32/integer>>),
+    ok = do_send(State#state.mod, State#state.sock, <<"X", 4:32/integer>>),
     case State#state.mod of
         gen_tcp -> gen_tcp:close(State#state.sock);
         ssl -> ssl:close(State#state.sock)
